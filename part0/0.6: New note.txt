@@ -1,0 +1,6 @@
+browser -> server: POST https://fullstack-exampleapp.herokuapp.com/new_note_spa
+server -> browser: 201 created
+
+note over browser:
+Browser handles code to add new note to list.
+end note
