@@ -1,7 +1,45 @@
-import React from 'react';
+import React, {useState} from 'react';
 import ReactDOM from 'react-dom';
 
-  const Header = (props) =>{
+const Display = ({counter}) => {
+  return(
+    <div>{counter}</div>
+  )
+}
+
+const IncreaseButton = (props) => {
+  return(
+    <button onClick={props.increaseByOne}>
+      plus
+    </button>
+  )
+}
+
+const Button = ({onClick, text}) => {
+  return(
+    <button onClick={onClick}>
+      {text}
+    </button>
+  )
+}
+
+const App = (props) => {
+  const [ counter, setCounter ] = useState(0)
+
+  const increaseByOne = () => setCounter(counter + 1)
+
+  const setToZero = () => setCounter(0)
+
+  return (
+    <div>
+      <Display counter={counter}/>
+      <Button onClick={increaseByOne} text='add'/>
+      <Button onClick = {setToZero} text="zero"/>
+    </div>
+  )
+}
+
+  /*const Header = (props) =>{
     return(
       <h1>{props.course}</h1>
     )
@@ -57,7 +95,7 @@ import ReactDOM from 'react-dom';
       </div>
     )
 
-  }
+  }*/
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
