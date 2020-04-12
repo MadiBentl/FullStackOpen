@@ -44,7 +44,7 @@ const App = () => {
           mostPopular = property
         }
       }
-    return mostPopular
+    return mostPopular;
   }
   return(
     <>
