@@ -15,12 +15,12 @@ const Languages = ({country}) =>{
     <>
       <h3>Languages</h3>
       <ul>
-        {country.languages.map(language =>  <li id={language.name}>{language.name}</li>)}
+        {country.languages.map(language =>  <li key={language.name}>{language.name}</li>)}
       </ul>
     </>)
 }
-
 const CountryInfo = ({country}) =>{
+  console.log("Country Info", {country})
   return (
     <div>
       <h2>{country.name}</h2>
@@ -31,6 +31,20 @@ const CountryInfo = ({country}) =>{
     </div>
   )
 }
+const ViewButton = ({country}) =>{
+  const [focusCountry, setFocusCountry] = useState([]);
+  const handleClick = (event) =>{
+    setFocusCountry({country})
+    console.log({country});
+  }
+  if (focusCountry.length === 0){
+    console.log(focusCountry)
+    return(<button name={country.name} onClick={handleClick}>View</button>)
+  }else{
+    console.log(focusCountry.length)
+    return(<CountryInfo country={country} />)
+  }
+}
 
 const CountryList = ({countriesToShow}) =>{
   if (countriesToShow.length == 1){
@@ -38,7 +52,11 @@ const CountryList = ({countriesToShow}) =>{
   }
   else if (countriesToShow.length < 5){
     return (<ul>
-    {countriesToShow.map(country => <li key ={country.name}>{country.name}</li>)}
+    {countriesToShow.map(country => {
+      return <li key ={country.name}>
+        {country.name}
+        <ViewButton country={country} />
+      </li>})}
     </ul>)
   }
   else{
