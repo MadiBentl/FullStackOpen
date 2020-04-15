@@ -32,17 +32,19 @@ const CountryInfo = ({country}) =>{
   )
 }
 const ViewButton = ({country}) =>{
-  const [focusCountry, setFocusCountry] = useState([]);
+  const [viewCountry, setViewCountry] = useState(false);
   const handleClick = (event) =>{
-    setFocusCountry({country})
-    console.log({country});
+    setViewCountry(!viewCountry)
   }
-  if (focusCountry.length === 0){
-    console.log(focusCountry)
+  if (!(viewCountry)){
     return(<button name={country.name} onClick={handleClick}>View</button>)
-  }else{
-    console.log(focusCountry.length)
-    return(<CountryInfo country={country} />)
+  }
+  else if (viewCountry){
+    return(
+      <>
+        <button name={country.name} onClick={handleClick}>View</button>
+        <CountryInfo country={country} />
+      </>)
   }
 }
 
@@ -68,6 +70,7 @@ const CountryList = ({countriesToShow}) =>{
 const App = () => {
   const [countries, setCountries] = useState([])
   const [query, setQuery] = useState('')
+
 
   useEffect(() => {
     axios
