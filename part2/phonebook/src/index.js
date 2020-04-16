@@ -1,8 +1,22 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import ReactDOM from 'react-dom';
+import axios from 'axios';
+import personsService from './services/persons.js'
 
-
-
+const DeleteButton = ({persons, person, setPersons}) => {
+  const handleClick = (event) => {
+    let result = window.confirm("delete????");
+    if (result){
+      personsService
+        .deletePerson(event.target.name)
+        .then(response => {
+          setPersons(persons.filter(p =>p.id !== person.id))
+        })
+        .catch(error => console.log("Person doesn't exist"))
+      }
+  }
+  return <button name={person.id} onClick={handleClick}>Delete</button>
+}
 const Header = ({text}) => {
   return <h2>{text}</h2>
 }
@@ -12,17 +26,31 @@ const PersonForm = ({persons, setPersons, setNewName, setNewNumber, handleChange
     event.preventDefault();
     persons.forEach(person => {
       if (person.name === event.target.name.value){
-        window.alert(`${event.target.name.value} is already in phonebook`)
-        isduplicate = true;
+        let result = window.confirm("Do you want to update?");
+        if (result){
+          const personObj = {
+            name: person.name,
+            number: event.target.num.value,
+            id: person.id
+          }
+          personsService
+            .updatePerson(person.id, personObj)
+            .then(updatedPerson => setPersons(persons.map(p => p.id !== person.id? p : updatedPerson)))
+            .catch(error => console.log("person doesnf exist"))
+          isduplicate = true;
+        }
       }
     });
     if (!(isduplicate)){
-      setPersons(persons.concat({
+      const personObj = {
         name: event.target.name.value,
         number: event.target.num.value
-      }))
-      setNewName('');
-      setNewNumber('');
+      }
+      personsService
+        .addPerson(personObj)
+        .then(newPerson => setPersons(persons.concat(newPerson)))
+        .then(setNewName(''))
+        .then(setNewNumber(''))
       isduplicate = false;
     }
   }
@@ -40,11 +68,11 @@ const PersonForm = ({persons, setPersons, setNewName, setNewNumber, handleChange
     </div>
   </form>)
 }
-const PeopleList = ({notesToShow, persons}) => {
+const PeopleList = ({notesToShow, persons, setPersons}) => {
   return(
     <ul>
       {notesToShow.map(person =>
-        <li key = {person.name}>{person.name} - {person.number}</li>)}
+        <li key = {person.id}>{person.name} - {person.number} <DeleteButton persons={persons} person={person} setPersons={setPersons} /></li>)}
     </ul>
   )
 }
@@ -64,13 +92,15 @@ const App = () => {
   const [ newName, setNewName ] = useState('')
   const [ newNumber, setNewNumber ] = useState('')
   const [ filterName, setFilterName ] = useState('')
-  const [ persons, setPersons] = useState([
-    { name: 'Arto Hellas', number: '040-123456' },
-    { name: 'Ada Lovelace', number: '39-44-5323523' },
-    { name: 'Dan Abramov', number: '12-43-234345' },
-    { name: 'Mary Poppendieck', number: '39-23-6423122' }
-  ])
-  const notesToShow = filterName.length == 0
+  const [ persons, setPersons] = useState([])
+
+  useEffect(() => {
+    personsService.getPersons().then(initialData => {
+          setPersons(initialData)
+        })
+      }, [])
+
+  const notesToShow = filterName.length === 0
   ? persons : persons.filter(person => person.name.includes(filterName))
   const handleChange = (event) =>{
     setNewName(event.target.value)
@@ -88,12 +118,15 @@ const App = () => {
         persons={persons}
         setFilterName={setFilterName}
         newName = {newName}
+        setNewName = {setNewName}
+        setNewNumber = {setNewNumber}
         newNumber={newNumber}
         handleNumChange={handleNumChange}
         handleChange={handleChange}
+        setPersons={setPersons}
       />
       <Header text="Numbers"/>
-      <PeopleList notesToShow={notesToShow} persons={persons}/>
+      <PeopleList notesToShow={notesToShow} setPersons = {setPersons} persons={persons}/>
     </div>
   )
 }
