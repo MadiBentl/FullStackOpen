@@ -1,9 +1,28 @@
 import React, {useState, useEffect} from 'react';
 import ReactDOM from 'react-dom';
 import axios from 'axios';
-import personsService from './services/persons.js'
+import personsService from './services/persons.js';
+import './index.css';
 
-const DeleteButton = ({persons, person, setPersons}) => {
+const Message = ({message}) =>{
+  if (message.person === ""){
+    return null
+  }
+  else if (message.msg == "successfully added"){
+    return (
+      <div className='success'>
+        {`${message.msg} ${message.person}`}
+      </div>
+    )
+  }else if (message.msg == "doesnt exist"){
+    return (
+      <div className='error'>
+        {` ${message.person} ${message.msg}`}
+      </div>
+    )
+  }
+}
+const DeleteButton = ({persons, person, setPersons, setMessage}) => {
   const handleClick = (event) => {
     let result = window.confirm("delete????");
     if (result){
@@ -12,7 +31,10 @@ const DeleteButton = ({persons, person, setPersons}) => {
         .then(response => {
           setPersons(persons.filter(p =>p.id !== person.id))
         })
-        .catch(error => console.log("Person doesn't exist"))
+        .catch(error => {
+          setMessage({person: person.name, msg: 'doesnt exist'});
+          setTimeout(() => setMessage({person:"", msg:""}), 5000)
+        })
       }
   }
   return <button name={person.id} onClick={handleClick}>Delete</button>
@@ -20,7 +42,7 @@ const DeleteButton = ({persons, person, setPersons}) => {
 const Header = ({text}) => {
   return <h2>{text}</h2>
 }
-const PersonForm = ({persons, setPersons, setNewName, setNewNumber, handleChange, newNumber, newName, handleNumChange}) =>{
+const PersonForm = ({persons, setPersons, setNewName, setNewNumber, handleChange, newNumber, newName, handleNumChange, setMessage}) =>{
   const handleSubmit = (event) =>{
     let isduplicate = false;
     event.preventDefault();
@@ -51,7 +73,12 @@ const PersonForm = ({persons, setPersons, setNewName, setNewNumber, handleChange
         .then(newPerson => setPersons(persons.concat(newPerson)))
         .then(setNewName(''))
         .then(setNewNumber(''))
+        .then( response => {
+          setMessage({person:personObj.name, msg: "successfully added"})
+          setTimeout(() => setMessage({person:"", msg: ""}), 5000)
+        })
       isduplicate = false;
+
     }
   }
 
@@ -68,11 +95,11 @@ const PersonForm = ({persons, setPersons, setNewName, setNewNumber, handleChange
     </div>
   </form>)
 }
-const PeopleList = ({notesToShow, persons, setPersons}) => {
+const PeopleList = ({notesToShow, persons, setPersons, setMessage}) => {
   return(
     <ul>
       {notesToShow.map(person =>
-        <li key = {person.id}>{person.name} - {person.number} <DeleteButton persons={persons} person={person} setPersons={setPersons} /></li>)}
+        <li key = {person.id}>{person.name} - {person.number} <DeleteButton setMessage={setMessage} persons={persons} person={person} setPersons={setPersons} /></li>)}
     </ul>
   )
 }
@@ -93,6 +120,7 @@ const App = () => {
   const [ newNumber, setNewNumber ] = useState('')
   const [ filterName, setFilterName ] = useState('')
   const [ persons, setPersons] = useState([])
+  const [ message, setMessage ] = useState({person:"", msg:""})
 
   useEffect(() => {
     personsService.getPersons().then(initialData => {
@@ -114,6 +142,7 @@ const App = () => {
       <Header text= "Phonebook"/>
       <Filter persons= {persons} setFilterName = {setFilterName} />
       <Header text="Add new"/>
+      <Message message = {message}/>
       <PersonForm
         persons={persons}
         setFilterName={setFilterName}
@@ -124,9 +153,10 @@ const App = () => {
         handleNumChange={handleNumChange}
         handleChange={handleChange}
         setPersons={setPersons}
+        setMessage={setMessage}
       />
       <Header text="Numbers"/>
-      <PeopleList notesToShow={notesToShow} setPersons = {setPersons} persons={persons}/>
+      <PeopleList notesToShow={notesToShow} setPersons = {setPersons} setMessage={setMessage} persons={persons}/>
     </div>
   )
 }
