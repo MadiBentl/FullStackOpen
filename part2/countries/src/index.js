@@ -10,6 +10,7 @@ const Search = ({handleQuery}) =>{
      </>
    )
 }
+
 const Languages = ({country}) =>{
   return(
     <>
@@ -19,8 +20,41 @@ const Languages = ({country}) =>{
       </ul>
     </>)
 }
+
+const Weather = ({weather}) => {
+  return(
+    <>
+      <h2>Current Weather </h2>
+      <img src={`http://openweathermap.org/img/wn/${weather.icon}@2x.png`} />
+      <p>{weather.description}</p>
+      <p>Wind: {weather.wind} km/h</p>
+    </>
+  )
+
+}
+
 const CountryInfo = ({country}) =>{
-  console.log("Country Info", {country})
+  const APIKEY = "7341f66d131be4663e75d126e95b4ed0"
+  const capital = country.capital
+
+  const [currentWeather, setCurrentWeather] = useState({
+    icon: "https://stancedlife.com/wp-content/uploads/2017/03/default-user-icon-8-1.jpg",
+    description: "",
+    wind: 0
+  })
+
+  useEffect(()=>{
+    axios
+      .get(`http://api.openweathermap.org/data/2.5/weather?q=${capital}&appid=${APIKEY}`)
+      .then(response =>{
+        console.log(response.data);
+        setCurrentWeather({
+          icon: response.data.weather[0].icon,
+          description: response.data.weather[0].description,
+          wind: response.data.wind.speed
+        })})
+      .then(console.log("then", currentWeather))
+  }, []);
   return (
     <div>
       <h2>{country.name}</h2>
@@ -28,6 +62,7 @@ const CountryInfo = ({country}) =>{
       <h5>Capital City: {country.capital} </h5>
       <h5>Population: {country.population} </h5>
       <Languages country={country} />
+      <Weather weather={currentWeather} />
     </div>
   )
 }
