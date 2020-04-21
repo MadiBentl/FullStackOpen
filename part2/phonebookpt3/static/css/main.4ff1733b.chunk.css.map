@@ -1,0 +1,1 @@
+{"version":3,"sources":["index.css"],"names":[],"mappings":"AAAA,SACE,WAAW,CACX,sBAAsB,CACtB,YACF,CACA,OACE,SAAS,CACT,oBAAoB,CACpB,YACF","file":"main.4ff1733b.chunk.css","sourcesContent":[".success{\n  color:green;\n  border:2px solid green;\n  padding: 10px;\n}\n.error{\n  color:red;\n  border:2px solid red;\n  padding: 10px;\n}\n"]}
