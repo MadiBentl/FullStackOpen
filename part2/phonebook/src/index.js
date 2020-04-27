@@ -20,6 +20,12 @@ const Message = ({message}) =>{
         {` ${message.person} ${message.msg}`}
       </div>
     )
+  }else{
+    return(
+      <div className='error'>
+        {`${message.msg}`}
+      </div>
+    )
   }
 }
 const DeleteButton = ({persons, person, setPersons, setMessage}) => {
@@ -73,12 +79,17 @@ const PersonForm = ({persons, setPersons, setNewName, setNewNumber, handleChange
         .then(newPerson => setPersons(persons.concat(newPerson)))
         .then(setNewName(''))
         .then(setNewNumber(''))
-        .then( response => {
+        .then(response => {
+          console.log("res", response)
           setMessage({person:personObj.name, msg: "successfully added"})
           setTimeout(() => setMessage({person:"", msg: ""}), 5000)
         })
-      isduplicate = false;
-
+        .catch(error =>  {
+          //if (error.response){
+            console.log("err:", error.response.data.message)
+            setMessage({person:personObj.name, msg: error.response.data.message})
+            setTimeout(() => setMessage({person:"", msg: ""}), 5000)
+        })
     }
   }
 

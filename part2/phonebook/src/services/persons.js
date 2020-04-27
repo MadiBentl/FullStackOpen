@@ -7,7 +7,7 @@ const getPersons = () =>{
 }
 
 const addPerson = (personObj) =>{
-  const request = axios.post(baseUrl, personObj);
+  const request = axios.put(baseUrl, personObj);
   return request.then(response => response.data)
 }
 
