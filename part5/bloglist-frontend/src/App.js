@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import Blog from './components/Blog'
 import Notification from './components/Notification'
+import Togglable from './components/Togglable'
+import BlogForm from './components/BlogForm'
 import blogService from './services/blogs'
 import loginService from './services/login'
 import './App.css'
@@ -10,7 +12,7 @@ const App = () => {
   const [user, setUser] = useState(null)
   const [password, setPassword] = useState('')
   const [username, setUsername] = useState('')
-  const [newBlog, setNewBlog] = useState({title: '', author: '', url: ''})
+
   const [notification, setNotification] = useState({msg:null, colour:null})
 
   useEffect(() => {
@@ -52,65 +54,39 @@ const App = () => {
       </div>
       <button type = 'submit'>login</button>
     </form>
+
     </>
   )
 
-  const newBlogForm = () => (
+  const LogOutButton = () => (
     <>
-      <h2>Add a new blog</h2>
-      <form onSubmit = {handleNewBlog}>
-        <div>
-          Title
-          <input
-            name='title'
-            value={newBlog.title}
-            type='text'
-            onChange={({target}) => setNewBlog({...newBlog, title:target.value})}
-          />
-        </div>
-        <div>
-          Author
-          <input
-            name='author'
-            value={newBlog.author}
-            type='text'
-            onChange={({target}) => setNewBlog({...newBlog, author:target.value})}
-          />
-        </div>
-        <div>
-          Url
-          <input
-            name='url'
-            value={newBlog.url}
-            type='text'
-            onChange={({target}) => setNewBlog({...newBlog, url:target.value})}
-          />
-        </div>
-        <button type='submit'>Add</button>
-      </form>
+      <p>{user.username} is logged in</p>
+      <button onClick={handleLogOut}>log out</button>
     </>
   )
+
+  const handleLogOut = () => {
+    setUser(null)
+    window.localStorage.removeItem('loggedInUser')
+  }
 
   const blogList = () => (
     <>
-      {notification.msg !== null && <Notification message={notification.msg} colour={notification.colour} />}
       <h2>blogs</h2>
-      <p>{`${user.username} is currently logged in`}</p>
       {blogs.map(blog =>
         <Blog key={blog.id} blog={blog} />
       )}
     </>
   )
 
-  const handleNewBlog = async (event) => {
-    event.preventDefault()
+  const handleNewBlog = async (newBlog) => {
     try{
+      BlogFormRef.current.toggleVisibility()
       const blog = await blogService.create({
         title: newBlog.title,
         author: newBlog.author,
         url: newBlog.url
       })
-      setNewBlog({title: '', author: '', url: ''})
     } catch(exception) {
       setNotification({msg: 'exception', colour:'bad-notification'});
       setTimeout(function () {
@@ -138,14 +114,21 @@ const App = () => {
     }
   }
 
+  const BlogFormRef = React.createRef()
   return (
     <div>
     {notification.msg !== null ?? <Notification message={notification.msg} colour={notification.colour}/>}
     {user === null ?
-      loginForm() :
-      blogList()
+      <Togglable buttonLabel='Log in'>
+        {loginForm()}
+      </Togglable>
+      :<><LogOutButton />
+      <Togglable buttonLabel='Add a note' ref={BlogFormRef}>
+        <BlogForm handleNewBlog ={handleNewBlog}/>
+      </Togglable>
+      </>
     }
-    {newBlogForm()}
+    {blogList()}
     </div>
   )
 }
