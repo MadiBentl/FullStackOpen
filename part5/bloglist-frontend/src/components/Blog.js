@@ -14,9 +14,12 @@ const Blog = ({ blog }) => {
         <button onClick={toggleButton}>{buttonLabel}</button>
       </div>
       <div style={showExtraInfo}>
-        {blog.url}
-        {blog.likes}
-        {blog.username}
+        <ul>
+        <li>{blog.url}</li>
+        <li>Likes: {blog.likes} <button>like</button></li>
+        {(blog.user) && <li>{blog.user.username} </li>}
+
+        </ul>
       </div>
     </div>
   )

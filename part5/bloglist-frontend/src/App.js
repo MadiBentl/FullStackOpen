@@ -85,7 +85,8 @@ const App = () => {
       const blog = await blogService.create({
         title: newBlog.title,
         author: newBlog.author,
-        url: newBlog.url
+        url: newBlog.url,
+        user: user.username
       })
     } catch(exception) {
       setNotification({msg: 'exception', colour:'bad-notification'});
