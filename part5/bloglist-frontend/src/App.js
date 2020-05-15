@@ -79,6 +79,10 @@ const App = () => {
     </>
   )
 
+  const likeBlog = async (editedBlog) => {
+    const blog = await blogService.incrementLikes(blog)
+  }
+
   const handleNewBlog = async (newBlog) => {
     try{
       BlogFormRef.current.toggleVisibility()
@@ -88,6 +92,7 @@ const App = () => {
         url: newBlog.url,
         user: user.username
       })
+      setBlogs(blogs.concat(blog))
     } catch(exception) {
       setNotification({msg: 'exception', colour:'bad-notification'});
       setTimeout(function () {
