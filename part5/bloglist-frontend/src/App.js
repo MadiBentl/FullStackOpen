@@ -13,12 +13,12 @@ const App = () => {
   const [password, setPassword] = useState('')
   const [username, setUsername] = useState('')
 
-  const [notification, setNotification] = useState({msg:null, colour:null})
+  const [notification, setNotification] = useState({ msg:null, colour:null })
 
   useEffect(() => {
     blogService.getAll().then(blogs => {
       setBlogs( blogs.sort(sortBlogs) )
-  })}, [])
+    })}, [])
 
   useEffect(() => {
     const loggedInUserJSON = window.localStorage.getItem('loggedInUser')
@@ -47,28 +47,28 @@ const App = () => {
 
   const loginForm = () => (
     <>
-    <h2>Login</h2>
-    <form onSubmit = {handleLogin}>
-    <div>
+      <h2>Login</h2>
+      <form onSubmit = {handleLogin}>
+        <div>
       Username
-        <input
-          type = 'test'
-          name = 'Username'
-          value = {username}
-          onChange={({ target }) => setUsername(target.value)}
-        />
-      </div>
-      <div>
+          <input
+            type = 'test'
+            name = 'Username'
+            value = {username}
+            onChange={({ target }) => setUsername(target.value)}
+          />
+        </div>
+        <div>
         Password
-        <input
-          type = 'password'
-          name = 'password'
-          value = {password}
-          onChange = {({target}) => setPassword(target.value)}
-        />
-      </div>
-      <button type = 'submit'>login</button>
-    </form>
+          <input
+            type = 'password'
+            name = 'password'
+            value = {password}
+            onChange = {({ target }) => setPassword(target.value)}
+          />
+        </div>
+        <button type = 'submit'>login</button>
+      </form>
 
     </>
   )
@@ -95,7 +95,7 @@ const App = () => {
   )
 
   const likeBlog = async (editedBlog) => {
-    await blogService.incrementLikes(editedBlog);
+    await blogService.incrementLikes(editedBlog)
     setBlogs(blogs.concat().sort(sortBlogs))
   }
 
@@ -110,10 +110,10 @@ const App = () => {
       })
       setBlogs(blogs.concat(blog))
     } catch(exception) {
-      setNotification({msg: 'exception', colour:'bad-notification'});
+      setNotification({ msg: 'exception', colour:'bad-notification' })
       setTimeout(function () {
-        setNotification({msg: null, colour: null})
-      }, 5000);
+        setNotification({ msg: null, colour: null })
+      }, 5000)
     }
   }
 
@@ -129,28 +129,28 @@ const App = () => {
       window.localStorage.setItem('loggedInUser', JSON.stringify(user))
       blogService.setToken(user.token)
     } catch(exception){
-        setNotification({msg:exception, colour: 'bad-notification'});
-        setTimeout(function () {
-          setNotification(null)
-        }, 5000);
+      setNotification({ msg:exception, colour: 'bad-notification' })
+      setTimeout(function () {
+        setNotification(null)
+      }, 5000)
     }
   }
 
   const BlogFormRef = React.createRef()
   return (
     <div>
-    {notification.msg !== null ?? <Notification message={notification.msg} colour={notification.colour}/>}
-    {user === null ?
-      <Togglable buttonLabel='Log in'>
-        {loginForm()}
-      </Togglable>
-      :<><LogOutButton />
-      <Togglable buttonLabel='Add a note' ref={BlogFormRef}>
-        <BlogForm handleNewBlog ={handleNewBlog}/>
-      </Togglable>
-      </>
-    }
-    {blogList()}
+      {notification.msg !== null && <Notification message={notification.msg} colour={notification.colour}/>}
+      {user === null ?
+        <Togglable buttonLabel='Log in'>
+          {loginForm()}
+        </Togglable>
+        :<><LogOutButton />
+          <Togglable buttonLabel='Add a note' ref={BlogFormRef}>
+            <BlogForm handleNewBlog ={handleNewBlog}/>
+          </Togglable>
+        </>
+      }
+      {blogList()}
     </div>
   )
 }

@@ -22,16 +22,16 @@ const create = async (newBlog) => {
 
 const incrementLikes = async (blog) => {
   const config = {
-    headers: {Authorization: token},
+    headers: { Authorization: token },
   }
-  blog.likes += 1;
+  blog.likes += 1
   const response = await axios.put(`${baseUrl}/${blog.id}`, blog, config)
   return response.data
 }
 
 const removeBlog = async(blog) => {
   const config = {
-    headers: {Authorization: token}
+    headers: { Authorization: token }
   }
   const response = await axios.delete(`${baseUrl}/${blog.id}`, config)
   return response.data
