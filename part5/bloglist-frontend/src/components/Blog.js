@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import blogService from '../services/blogs'
 
-const Blog = ({ blog }) => {
+const Blog = ({ blog, likeBlog }) => {
   const [visible, setVisibility] = useState(false)
 
   const showExtraInfo = {display: visible ? '' : 'none'}
@@ -17,7 +17,7 @@ const Blog = ({ blog }) => {
       <div style={showExtraInfo}>
         <ul>
         <li>{blog.url}</li>
-        <li>Likes: {blog.likes} <button>like</button></li>
+        <li>Likes: {blog.likes} <button onClick={() => likeBlog(blog)}>like</button></li>
         {(blog.user) && <li>{blog.user.username} </li>}
 
         </ul>

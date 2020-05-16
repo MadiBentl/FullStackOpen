@@ -74,13 +74,14 @@ const App = () => {
     <>
       <h2>blogs</h2>
       {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} />
+        <Blog key={blog.id} blog={blog} likeBlog={likeBlog}/>
       )}
     </>
   )
 
   const likeBlog = async (editedBlog) => {
-    const blog = await blogService.incrementLikes(blog)
+    await blogService.incrementLikes(editedBlog);
+    setBlogs(blogs.concat().sort(blogs.likes))
   }
 
   const handleNewBlog = async (newBlog) => {
