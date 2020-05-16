@@ -16,10 +16,9 @@ const App = () => {
   const [notification, setNotification] = useState({msg:null, colour:null})
 
   useEffect(() => {
-    blogService.getAll().then(blogs =>
-      setBlogs( blogs )
-    )
-  }, [])
+    blogService.getAll().then(blogs => {
+      setBlogs( blogs.sort(sortBlogs) )
+  })}, [])
 
   useEffect(() => {
     const loggedInUserJSON = window.localStorage.getItem('loggedInUser')
@@ -29,6 +28,15 @@ const App = () => {
       blogService.setToken(user.token)
     }
   }, [])
+
+  const sortBlogs = (a,b) => {
+    if (a.likes > b.likes){
+      return -1
+    } else if (a.likes > b.likes){
+      return 1
+    }
+    return 0
+  }
 
   const loginForm = () => (
     <>
@@ -81,7 +89,7 @@ const App = () => {
 
   const likeBlog = async (editedBlog) => {
     await blogService.incrementLikes(editedBlog);
-    setBlogs(blogs.concat().sort(blogs.likes))
+    setBlogs(blogs.concat().sort(sortBlogs))
   }
 
   const handleNewBlog = async (newBlog) => {

@@ -19,7 +19,6 @@ const Blog = ({ blog, likeBlog }) => {
         <li>{blog.url}</li>
         <li>Likes: {blog.likes} <button onClick={() => likeBlog(blog)}>like</button></li>
         {(blog.user) && <li>{blog.user.username} </li>}
-
         </ul>
       </div>
     </div>
