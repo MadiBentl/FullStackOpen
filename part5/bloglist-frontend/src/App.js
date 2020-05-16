@@ -38,6 +38,11 @@ const App = () => {
     return 0
   }
 
+  const deleteBlog = async (deletableBlog) => {
+    await blogService.removeBlog(deletableBlog)
+    setBlogs(blogs.filter(blog => blog.id !== deletableBlog.id))
+  }
+
   const loginForm = () => (
     <>
     <h2>Login</h2>
@@ -82,7 +87,7 @@ const App = () => {
     <>
       <h2>blogs</h2>
       {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} likeBlog={likeBlog}/>
+        <Blog key={blog.id} blog={blog} likeBlog={likeBlog} deleteBlog={deleteBlog}/>
       )}
     </>
   )
