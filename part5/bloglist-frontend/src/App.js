@@ -39,8 +39,10 @@ const App = () => {
   }
 
   const deleteBlog = async (deletableBlog) => {
-    await blogService.removeBlog(deletableBlog)
-    setBlogs(blogs.filter(blog => blog.id !== deletableBlog.id))
+    if (window.confirm(`Do you really want to delete ${deletableBlog.title}`)){
+      await blogService.removeBlog(deletableBlog)
+      setBlogs(blogs.filter(blog => blog.id !== deletableBlog.id))
+    }
   }
 
   const loginForm = () => (
