@@ -17,6 +17,7 @@ const BlogForm = ({ handleNewBlog }) => {
         <div>
           Title
           <input
+            id='title'
             name='title'
             value={newBlog.title}
             type='text'
@@ -26,6 +27,7 @@ const BlogForm = ({ handleNewBlog }) => {
         <div>
           Author
           <input
+            id='author'
             name='author'
             value={newBlog.author}
             type='text'
@@ -35,6 +37,7 @@ const BlogForm = ({ handleNewBlog }) => {
         <div>
           Url
           <input
+            id='url'
             name='url'
             value={newBlog.url}
             type='text'
