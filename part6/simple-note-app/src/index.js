@@ -1,16 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { createStore } from 'redux'
+import noteReducer from './reducers/noteReducer.js'
 
-const noteReducer = (state = [], action) => {
-  switch (action.type) {
-    case 'ADD_NOTE':
-      state = state.concat(action.data)
-      return state
-    default:
-      return state
-  }
-}
 
 const store = createStore(noteReducer)
 store.dispatch({
