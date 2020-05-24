@@ -11,12 +11,12 @@ const Blog = ({ blog, user, likeBlog, deleteBlog }) => {
     <div>
       <div className='mainInfo'>
         {blog.title} {blog.author}
-        <button onClick={toggleButton}>{buttonLabel}</button>
+        <button className='show' onClick={toggleButton}>{buttonLabel}</button>
       </div>
       <div style={showExtraInfo} className='extraInfo'>
         <ul>
           <li>{blog.url}</li>
-          <li className='likes'>Likes: {blog.likes} <button onClick={() => likeBlog(blog)}>like</button></li>
+          <li className='likes'>Likes: {blog.likes} <button onClick={() => likeBlog(blog)} className='like'>like</button></li>
           {(blog.user && blog.user.username) && <li>{blog.user.username} </li>}
           {(user && blog.user && blog.user.username === user.username) &&<li><button onClick={() => deleteBlog(blog)}>Delete</button></li>}
         </ul>

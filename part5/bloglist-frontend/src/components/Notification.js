@@ -1,6 +1,6 @@
 import React from 'react'
 
-const Notification = ({message, colour}) => (
+const Notification = ({ message, colour }) => (
   <div className={colour}>
     <p>{message}</p>
   </div>

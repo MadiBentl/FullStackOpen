@@ -54,6 +54,7 @@ const App = () => {
           <input
             type = 'test'
             name = 'Username'
+            id='username'
             value = {username}
             onChange={({ target }) => setUsername(target.value)}
           />
@@ -63,11 +64,12 @@ const App = () => {
           <input
             type = 'password'
             name = 'password'
+            id = 'password'
             value = {password}
             onChange = {({ target }) => setPassword(target.value)}
           />
         </div>
-        <button type = 'submit'>login</button>
+        <button id='login_button' type = 'submit'>login</button>
       </form>
 
     </>
@@ -129,9 +131,10 @@ const App = () => {
       window.localStorage.setItem('loggedInUser', JSON.stringify(user))
       blogService.setToken(user.token)
     } catch(exception){
-      setNotification({ msg:exception, colour: 'bad-notification' })
+      console.log(exception)
+      setNotification({ msg:'Wrong Username or password', colour: 'bad-notification' })
       setTimeout(function () {
-        setNotification(null)
+        setNotification({ msg:null, colour:null })
       }, 5000)
     }
   }
@@ -145,7 +148,7 @@ const App = () => {
           {loginForm()}
         </Togglable>
         :<><LogOutButton />
-          <Togglable buttonLabel='Add a note' ref={BlogFormRef}>
+          <Togglable buttonLabel='Add a blog' ref={BlogFormRef}>
             <BlogForm handleNewBlog ={handleNewBlog}/>
           </Togglable>
         </>
