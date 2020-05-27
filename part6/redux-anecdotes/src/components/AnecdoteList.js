@@ -10,8 +10,7 @@ const AnecdoteList = () => {
       return state.anecdotes
     }else{
       return state.anecdotes.filter(anecdote => {
-        //console.log(anecdote.content, state.filter)
-        return anecdote.content.indexOf(state.filter) != -1
+        return anecdote.content.indexOf(state.filter) !== -1
       })
     }
   })
