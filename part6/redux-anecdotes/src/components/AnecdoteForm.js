@@ -1,7 +1,6 @@
 import React from 'react'
 import { useDispatch } from 'react-redux'
 import { addAnecdote } from '../reducers/anecdoteReducer'
-import anecdoteService from '../services/anecdotes'
 
 const AnecdoteForm = () => {
   const dispatch = useDispatch()
@@ -9,8 +8,7 @@ const AnecdoteForm = () => {
   const handleSubmit = async (event) => {
     event.preventDefault()
     const content = event.target.anecdote.value
-    await anecdoteService.newAnecdote(content).then(anec => dispatch(addAnecdote(anec)))
-
+    await dispatch(addAnecdote(content))
   }
   return(
     <div>

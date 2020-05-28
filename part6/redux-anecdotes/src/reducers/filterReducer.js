@@ -6,9 +6,8 @@ const filterReducer = (state = initialState, action) => {
     case 'FILTER':
       return action.query
     default:
-      return state;
-  }
-  return state
+      return state
+    }
 }
 
 export const filterAnecdotes = (query) => {

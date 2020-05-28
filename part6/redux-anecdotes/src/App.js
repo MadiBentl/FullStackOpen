@@ -10,15 +10,15 @@ import anecdoteService from './services/anecdotes'
 const App = () => {
   const dispatch = useDispatch()
   useEffect(() => {
-    anecdoteService.getAll().then(anecdotes => {
-      console.log("here", anecdotes)
+    /*anecdoteService.getAll().then(anecdotes => {
+      console.log(anecdotes)
       dispatch(loadAnecdotes(anecdotes))
-    })
-
+    })*/
+    dispatch(loadAnecdotes())
   }, [dispatch])
   return (
     <div>
-    <h2>Anecdotes</h2>
+      <h2>Anecdotes</h2>
       <Notification />
       <Filter />
       <AnecdoteList />

@@ -1,19 +1,18 @@
 {
   "anecdotes": [
     {
-      "content": "If it hurts, do it more often",
       "id": "47145",
-      "votes": 0
+      "votes": 2
     },
     {
-      "content": "Adding manpower to a late software project makes it later!",
       "id": "21149",
-      "votes": 0
+      "content": "Adding manpower to a late software project makes it later!",
+      "votes": 10
     },
     {
-      "content": "The first 90 percent of the code accounts for the first 90 percent of the development time...The remaining 10 percent of the code accounts for the other 90 percent of the development time.",
       "id": "69581",
-      "votes": 0
+      "content": "The first 90 percent of the code accounts for the first 90 percent of the development time...The remaining 10 percent of the code accounts for the other 90 percent of the development time.",
+      "votes": 3
     },
     {
       "content": "Any fool can write code that a computer can understand. Good programmers write code that humans can understand.",
@@ -39,6 +38,99 @@
       "content": "df",
       "votes": 0,
       "id": "vmyuw5c"
+    },
+    {
+      "votes": 0,
+      "id": "gPxkBoz"
+    },
+    {
+      "votes": 0,
+      "id": "mmkGuZr"
+    },
+    {
+      "content": "ffffff",
+      "votes": 0,
+      "id": "nolYr33"
+    },
+    {
+      "content": "test",
+      "votes": 0,
+      "id": "IO3ApRf"
+    },
+    {
+      "content": "test2",
+      "votes": 0,
+      "id": "nEtyFZn"
+    },
+    {
+      "content": "df",
+      "votes": 0,
+      "id": "Nz3fW88"
+    },
+    {
+      "content": "s",
+      "votes": 0,
+      "id": "zuMk-1V"
+    },
+    {
+      "content": "test",
+      "votes": 0,
+      "id": "-xmbqcg"
+    },
+    {
+      "content": "please work",
+      "votes": 0,
+      "id": "cSpoUyW"
+    },
+    {
+      "content": "tesssst",
+      "votes": 0,
+      "id": "TSe_DOc"
+    },
+    {
+      "content": "",
+      "votes": 0,
+      "id": "Jy3Vlmu"
+    },
+    {
+      "content": "nmnmn",
+      "votes": 0,
+      "id": "OEcUbd8"
+    },
+    {
+      "content": "nmnmn",
+      "votes": 0,
+      "id": "H48ZttW"
+    },
+    {
+      "content": "help",
+      "votes": 0,
+      "id": "ZXsGdjh"
+    },
+    {
+      "content": "rer",
+      "votes": 0,
+      "id": "xJEQu6m"
+    },
+    {
+      "content": "test",
+      "votes": 0,
+      "id": "RwPx501"
+    },
+    {
+      "content": "help",
+      "votes": 0,
+      "id": "i4OrlFe"
+    },
+    {
+      "content": "fvghbjnkml",
+      "votes": 0,
+      "id": "ZT8_7Kr"
+    },
+    {
+      "content": "hghgh",
+      "votes": 0,
+      "id": "bhM-aRA"
     }
   ]
 }
