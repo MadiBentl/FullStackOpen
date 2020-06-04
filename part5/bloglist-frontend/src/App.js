@@ -3,22 +3,34 @@ import Blog from './components/Blog'
 import Notification from './components/Notification'
 import Togglable from './components/Togglable'
 import BlogForm from './components/BlogForm'
+import BlogList from './components/BlogList'
 import blogService from './services/blogs'
 import loginService from './services/login'
 import './App.css'
+
+//redux
+import { getInitialBlogs } from './reducers/blogReducer'
+import { useDispatch } from 'react-redux'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [user, setUser] = useState(null)
   const [password, setPassword] = useState('')
   const [username, setUsername] = useState('')
-
   const [notification, setNotification] = useState({ msg:null, colour:null })
+
+  //redux
+  const dispatch = useDispatch()
 
   useEffect(() => {
     blogService.getAll().then(blogs => {
       setBlogs( blogs.sort(sortBlogs) )
-    })}, [])
+    })
+    const getReduxBlogs = async () => {
+      return await dispatch(getInitialBlogs())
+    }
+    getReduxBlogs()
+  }, [])
 
   useEffect(() => {
     const loggedInUserJSON = window.localStorage.getItem('loggedInUser')
@@ -87,20 +99,6 @@ const App = () => {
     window.localStorage.removeItem('loggedInUser')
   }
 
-  const blogList = () => (
-    <>
-      <h2>blogs</h2>
-      {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} user={user} likeBlog={likeBlog} deleteBlog={deleteBlog}/>
-      )}
-    </>
-  )
-
-  const likeBlog = async (editedBlog) => {
-    await blogService.incrementLikes(editedBlog)
-    setBlogs(blogs.concat().sort(sortBlogs))
-  }
-
   const handleNewBlog = async (newBlog) => {
     try{
       BlogFormRef.current.toggleVisibility()
@@ -153,7 +151,7 @@ const App = () => {
           </Togglable>
         </>
       }
-      {blogList()}
+      <BlogList />
     </div>
   )
 }
