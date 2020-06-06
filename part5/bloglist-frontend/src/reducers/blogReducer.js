@@ -52,6 +52,7 @@ export const voteBlog = (blog) => {
 
 export const deleteBlog = (blog) => {
   return async dispatch => {
+    console.log('deleting..', blog)
     await blogService.removeBlog(blog)
     dispatch({ type: 'DELETE_BLOG', data: { id: blog.id } })
   }
