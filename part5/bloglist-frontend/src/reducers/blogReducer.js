@@ -43,6 +43,10 @@ export const voteBlog = (blog) => {
   return async dispatch => {
     await blogService.incrementLikes(blog)
     dispatch({ type: 'UPVOTE_BLOG', data: { id: blog.id } })
+    dispatch({ type: 'SET_NOTIFICATION', data:{ msg:'you liked a blog', style:'good-notification' } })
+    setTimeout(() => {
+      dispatch({ type: 'CLEAR_NOTIFICATION' })
+    }, 5000)
   }
 }
 
