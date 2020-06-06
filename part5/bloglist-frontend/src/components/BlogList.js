@@ -4,7 +4,6 @@ import { useSelector } from 'react-redux'
 
 const BlogList = () => {
   const blogs = useSelector(state => state.blogs)
-  console.log('blogs', blogs)
   return(
     <div>
       <h2>Blog Articles</h2>

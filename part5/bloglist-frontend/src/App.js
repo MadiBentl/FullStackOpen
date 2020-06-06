@@ -1,18 +1,20 @@
-import React, { useState, useEffect } from 'react'
-import { useSelector } from 'react-redux'
+import React, { useEffect } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
+
 import Notification from './components/Notification'
 import Togglable from './components/Togglable'
 import BlogForm from './components/BlogForm'
 import BlogList from './components/BlogList'
 import LoginForm from './components/LoginForm'
+import LogoutButton from './components/LogoutButton'
 import './App.css'
 
 import { getInitialBlogs } from './reducers/blogReducer'
-import { setInitialUser, logout } from './reducers/loginReducer'
-import { useDispatch } from 'react-redux'
+import { setInitialUser } from './reducers/loginReducer'
 
 const App = () => {
   const user = useSelector(state => state.login.user)
+  const notification = useSelector(state => state.notification)
   const dispatch = useDispatch()
 
   useEffect(() => {
@@ -30,27 +32,16 @@ const App = () => {
     }
   }, [])
 
-  const LogOutButton = () => (
-    <>
-      <p>{user} is logged in</p>
-      <button onClick={handleLogOut}>log out</button>
-    </>
-  )
-
-  const handleLogOut = () => {
-    dispatch(logout(null))
-    window.localStorage.removeItem('loggedInUser')
-  }
 
   const BlogFormRef = React.createRef()
   return (
     <div>
-      {/*  {notification.msg !== null && <Notification message={notification.msg} colour={notification.colour}/>}*/}
+      {notification !== null && <Notification />}
       {user === null ?
         <Togglable buttonLabel='Log in'>
           <LoginForm />
         </Togglable>
-        :<><LogOutButton />
+        :<><LogoutButton />
           <Togglable buttonLabel='Add a blog' ref={BlogFormRef}>
             <BlogForm />
           </Togglable>

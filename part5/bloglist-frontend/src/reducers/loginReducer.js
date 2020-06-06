@@ -25,9 +25,16 @@ export const login = (credentials) => {
         dispatch({ type: 'LOGIN', user: credentials.username })
         window.localStorage.setItem('loggedInUser', JSON.stringify(user))
         blogService.setToken(user.token)
+        dispatch({ type: 'SET_NOTIFICATION', data:{ msg:'YEEAAAA', style:'good-notification' } })
+        setTimeout(() => {
+          dispatch({ type: 'CLEAR_NOTIFICATION' })
+        }, 5000)
       }
     }catch(exception){
-      console.log(exception)
+      dispatch({ type: 'SET_NOTIFICATION', data:{ msg:'ahhhhh', style:'bad-notification' } })
+      setTimeout(() => {
+        dispatch({ type: 'CLEAR_NOTIFICATION' })
+      }, 5000)
     }
   }
 }
