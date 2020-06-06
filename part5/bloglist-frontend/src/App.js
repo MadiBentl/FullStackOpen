@@ -1,31 +1,21 @@
 import React, { useState, useEffect } from 'react'
-import Blog from './components/Blog'
+import { useSelector } from 'react-redux'
 import Notification from './components/Notification'
 import Togglable from './components/Togglable'
 import BlogForm from './components/BlogForm'
 import BlogList from './components/BlogList'
-import blogService from './services/blogs'
-import loginService from './services/login'
+import LoginForm from './components/LoginForm'
 import './App.css'
 
-//redux
 import { getInitialBlogs } from './reducers/blogReducer'
+import { setInitialUser, logout } from './reducers/loginReducer'
 import { useDispatch } from 'react-redux'
 
 const App = () => {
-  const [blogs, setBlogs] = useState([])
-  const [user, setUser] = useState(null)
-  const [password, setPassword] = useState('')
-  const [username, setUsername] = useState('')
-  const [notification, setNotification] = useState({ msg:null, colour:null })
-
-  //redux
+  const user = useSelector(state => state.login.user)
   const dispatch = useDispatch()
 
   useEffect(() => {
-    blogService.getAll().then(blogs => {
-      setBlogs( blogs.sort(sortBlogs) )
-    })
     const getReduxBlogs = async () => {
       return await dispatch(getInitialBlogs())
     }
@@ -36,118 +26,33 @@ const App = () => {
     const loggedInUserJSON = window.localStorage.getItem('loggedInUser')
     if (loggedInUserJSON) {
       const user = JSON.parse(loggedInUserJSON)
-      setUser(user)
-      blogService.setToken(user.token)
+      dispatch(setInitialUser(user))
     }
   }, [])
 
-  const sortBlogs = (a,b) => {
-    if (a.likes > b.likes){
-      return -1
-    } else if (a.likes > b.likes){
-      return 1
-    }
-    return 0
-  }
-
-  const deleteBlog = async (deletableBlog) => {
-    if (window.confirm(`Do you really want to delete ${deletableBlog.title}`)){
-      await blogService.removeBlog(deletableBlog)
-      setBlogs(blogs.filter(blog => blog.id !== deletableBlog.id))
-    }
-  }
-
-  const loginForm = () => (
-    <>
-      <h2>Login</h2>
-      <form onSubmit = {handleLogin}>
-        <div>
-      Username
-          <input
-            type = 'test'
-            name = 'Username'
-            id='username'
-            value = {username}
-            onChange={({ target }) => setUsername(target.value)}
-          />
-        </div>
-        <div>
-        Password
-          <input
-            type = 'password'
-            name = 'password'
-            id = 'password'
-            value = {password}
-            onChange = {({ target }) => setPassword(target.value)}
-          />
-        </div>
-        <button id='login_button' type = 'submit'>login</button>
-      </form>
-
-    </>
-  )
-
   const LogOutButton = () => (
     <>
-      <p>{user.username} is logged in</p>
+      <p>{user} is logged in</p>
       <button onClick={handleLogOut}>log out</button>
     </>
   )
 
   const handleLogOut = () => {
-    setUser(null)
+    dispatch(logout(null))
     window.localStorage.removeItem('loggedInUser')
-  }
-
-  const handleNewBlog = async (newBlog) => {
-    try{
-      BlogFormRef.current.toggleVisibility()
-      const blog = await blogService.create({
-        title: newBlog.title,
-        author: newBlog.author,
-        url: newBlog.url,
-        user: user.username
-      })
-      setBlogs(blogs.concat(blog))
-    } catch(exception) {
-      setNotification({ msg: 'exception', colour:'bad-notification' })
-      setTimeout(function () {
-        setNotification({ msg: null, colour: null })
-      }, 5000)
-    }
-  }
-
-  const handleLogin = async (event) => {
-    event.preventDefault()
-    try{
-      const user = await loginService.login({
-        username, password
-      })
-      setUser(user)
-      setUsername('')
-      setPassword('')
-      window.localStorage.setItem('loggedInUser', JSON.stringify(user))
-      blogService.setToken(user.token)
-    } catch(exception){
-      console.log(exception)
-      setNotification({ msg:'Wrong Username or password', colour: 'bad-notification' })
-      setTimeout(function () {
-        setNotification({ msg:null, colour:null })
-      }, 5000)
-    }
   }
 
   const BlogFormRef = React.createRef()
   return (
     <div>
-      {notification.msg !== null && <Notification message={notification.msg} colour={notification.colour}/>}
+      {/*  {notification.msg !== null && <Notification message={notification.msg} colour={notification.colour}/>}*/}
       {user === null ?
         <Togglable buttonLabel='Log in'>
-          {loginForm()}
+          <LoginForm />
         </Togglable>
         :<><LogOutButton />
           <Togglable buttonLabel='Add a blog' ref={BlogFormRef}>
-            <BlogForm handleNewBlog ={handleNewBlog}/>
+            <BlogForm />
           </Togglable>
         </>
       }

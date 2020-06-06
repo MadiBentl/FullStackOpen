@@ -1,9 +1,18 @@
 import blogService from '../services/blogs'
 
+const sortBlogs = (a,b) => {
+  if (a.likes > b.likes){
+    return -1
+  } else if (a.likes > b.likes){
+    return 1
+  }
+  return 0
+}
+
 const blogReducer = (state=[], action) => {
   switch(action.type){
     case 'INIT_BLOGS':
-      return action.data.blogs
+      return action.data.blogs.sort(sortBlogs)
     case 'CREATE_BLOG':
       return state.concat(action.data.blog)
     case 'DELETE_BLOG':
@@ -18,7 +27,6 @@ const blogReducer = (state=[], action) => {
           return blog
         }
       })
-      return state
     default:
       return state
   }
