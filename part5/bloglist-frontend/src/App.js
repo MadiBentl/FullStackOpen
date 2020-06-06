@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
+import { BrowserRouter as Router, Link, Switch, Route } from 'react-router-dom'
 
 import Notification from './components/Notification'
 import Togglable from './components/Togglable'
@@ -8,6 +9,9 @@ import BlogList from './components/BlogList'
 import LoginForm from './components/LoginForm'
 import LogoutButton from './components/LogoutButton'
 import UserDashboard from './components/Users'
+import UserView from './components/UserView'
+import BlogDetail from './components/BlogDetail'
+
 import './App.css'
 
 import { getInitialBlogs } from './reducers/blogReducer'
@@ -36,21 +40,39 @@ const App = () => {
 
   const BlogFormRef = React.createRef()
   return (
-    <div>
-      {notification !== null && <Notification />}
-      {user === null ?
-        <Togglable buttonLabel='Log in'>
-          <LoginForm />
-        </Togglable>
-        :<><LogoutButton />
-          <Togglable buttonLabel='Add a blog' ref={BlogFormRef}>
-            <BlogForm />
+    <Router>
+      <div>
+        {notification !== null && <Notification />}
+        {user === null ?
+          <Togglable buttonLabel='Log in'>
+            <LoginForm />
           </Togglable>
-        </>
-      }
-      <BlogList />
-      <UserDashboard />
-    </div>
+          :<><LogoutButton />
+            <Togglable buttonLabel='Add a blog' ref={BlogFormRef}>
+              <BlogForm />
+            </Togglable>
+          </>
+        }
+        <div>
+          <Link to="/">Home</Link>
+          <Link to='/Users'>Users</Link>
+        </div>
+        <Switch>
+          <Route path='/Users/:id'>
+            <UserView />
+          </Route>
+          <Route path='/Users'>
+            <UserDashboard />
+          </Route>
+          <Route path = '/:id'>
+            <BlogDetail />
+          </Route>
+          <Route path='/'>
+            <BlogList />
+          </Route>
+        </Switch>
+      </div>
+    </Router>
   )
 }
 
