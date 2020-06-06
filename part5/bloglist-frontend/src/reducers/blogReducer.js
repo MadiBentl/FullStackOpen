@@ -52,15 +52,16 @@ export const voteBlog = (blog) => {
 
 export const deleteBlog = (blog) => {
   return async dispatch => {
-    const blogs = await blogService.removeBlog(blog)
-    console.log('blogs from dispatch', blogs)
+    await blogService.removeBlog(blog)
     dispatch({ type: 'DELETE_BLOG', data: { id: blog.id } })
   }
 }
 
-export const addBlog = blog => {
+export const addBlog = (blog, user) => {
   return async dispatch => {
+    console.log(blog)
     const newBlog = await blogService.create(blog)
+    newBlog.user = { id: newBlog.user, username: user }
     dispatch({ type: 'CREATE_BLOG', data: { blog: newBlog } })
   }
 }

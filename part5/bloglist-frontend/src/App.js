@@ -7,6 +7,7 @@ import BlogForm from './components/BlogForm'
 import BlogList from './components/BlogList'
 import LoginForm from './components/LoginForm'
 import LogoutButton from './components/LogoutButton'
+import UserDashboard from './components/Users'
 import './App.css'
 
 import { getInitialBlogs } from './reducers/blogReducer'
@@ -48,6 +49,7 @@ const App = () => {
         </>
       }
       <BlogList />
+      <UserDashboard />
     </div>
   )
 }
