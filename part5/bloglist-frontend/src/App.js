@@ -22,7 +22,7 @@ const App = () => {
       return await dispatch(getInitialBlogs())
     }
     getReduxBlogs()
-  }, [])
+  }, [dispatch])
 
   useEffect(() => {
     const loggedInUserJSON = window.localStorage.getItem('loggedInUser')
@@ -30,7 +30,7 @@ const App = () => {
       const user = JSON.parse(loggedInUserJSON)
       dispatch(setInitialUser(user))
     }
-  }, [])
+  }, [dispatch])
 
 
   const BlogFormRef = React.createRef()

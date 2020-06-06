@@ -6,14 +6,12 @@ const loginReducer = (state= { user: null }, action) => {
     case 'LOGIN':
       console.log('user', action.user)
       return { user: action.user }
-      break;
     case 'LOGOUT':
       return { user: null }
-      break;
     case 'SET_INITIAL_USER':
       return { user: action.user }
     default:
-      return state;
+      return state
   }
 }
 
