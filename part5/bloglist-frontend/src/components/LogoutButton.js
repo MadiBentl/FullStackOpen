@@ -11,12 +11,15 @@ const LogOutButton = () => {
     window.localStorage.removeItem('loggedInUser')
   }
 
-  return(
-    <>
-      <p>{user} is logged in</p>
-      <button onClick={handleLogOut}>log out</button>
-    </>
-  )
+  if (user !== null){
+    return(
+      <div>
+        <p>{user} is logged in</p><button onClick={handleLogOut}>log out</button>
+      </div>
+    )
+  }else{
+    return null
+  }
 }
 
 export default LogOutButton

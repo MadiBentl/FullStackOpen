@@ -7,10 +7,10 @@ import Togglable from './components/Togglable'
 import BlogForm from './components/BlogForm'
 import BlogList from './components/BlogList'
 import LoginForm from './components/LoginForm'
-import LogoutButton from './components/LogoutButton'
 import UserDashboard from './components/Users'
 import UserView from './components/UserView'
 import BlogDetail from './components/BlogDetail'
+import Navbar from './components/Navbar'
 
 import './App.css'
 
@@ -42,21 +42,18 @@ const App = () => {
   return (
     <Router>
       <div>
+        <Navbar />
         {notification !== null && <Notification />}
         {user === null ?
           <Togglable buttonLabel='Log in'>
             <LoginForm />
           </Togglable>
-          :<><LogoutButton />
+          :<>
             <Togglable buttonLabel='Add a blog' ref={BlogFormRef}>
               <BlogForm />
             </Togglable>
           </>
         }
-        <div>
-          <Link to="/">Home</Link>
-          <Link to='/Users'>Users</Link>
-        </div>
         <Switch>
           <Route path='/Users/:id'>
             <UserView />
