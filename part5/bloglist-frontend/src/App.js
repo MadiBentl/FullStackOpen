@@ -1,6 +1,8 @@
 import React, { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { BrowserRouter as Router, Link, Switch, Route } from 'react-router-dom'
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
+import { Container } from '@material-ui/core'
+
 
 import Notification from './components/Notification'
 import Togglable from './components/Togglable'
@@ -41,7 +43,7 @@ const App = () => {
   const BlogFormRef = React.createRef()
   return (
     <Router>
-      <div>
+      <Container>
         <Navbar />
         {notification !== null && <Notification />}
         {user === null ?
@@ -68,7 +70,7 @@ const App = () => {
             <BlogList />
           </Route>
         </Switch>
-      </div>
+      </Container>
     </Router>
   )
 }

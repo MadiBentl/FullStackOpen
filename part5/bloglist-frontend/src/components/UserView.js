@@ -1,6 +1,7 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
+import {TableContainer, Table, TableHead, TableBody, TableRow, TableCell } from '@material-ui/core'
 
 const UserView = () => {
   const id = useParams().id
@@ -16,19 +17,19 @@ const UserView = () => {
   return(
     <>
       <h1>{blogs[0].user.username}</h1>
-      <table>
-        <thead>
-          <tr>
-            <th>Title</th>
-            <th>Likes</th>
-          </tr>
-        </thead>
-        <tbody>
+      <Table aria-label="simple table">
+        <TableHead>
+          <TableRow>
+            <TableCell>Title</TableCell>
+            <TableCell>Likes</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
           {blogs.map(blog =>
-            <tr key={blog.title}><td>{blog.title}</td><td>{blog.likes}</td></tr>
+            <TableRow key={blog.title}><TableCell>{blog.title}</TableCell><TableCell>{blog.likes}</TableCell></TableRow>
           )}
-        </tbody>
-      </table>
+        </TableBody>
+      </Table>
     </>
   )
 }

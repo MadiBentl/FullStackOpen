@@ -1,15 +1,23 @@
 import React from 'react'
-import { useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 import LogoutButton from './LogoutButton'
+import { AppBar, Toolbar, Button, IconButton } from '@material-ui/core'
 
 const Navbar = () => {
   return(
-    <div>
-      <Link to="/">Home</Link>
-      <Link to='/Users'>Users</Link>
-      <LogoutButton />
-    </div>
+    <AppBar position="static">
+      <Toolbar>
+        <IconButton edge="start" color="inherit" aria-label="menu">
+        </IconButton>
+        <Button color="inherit" component={Link} to="/">
+          home
+        </Button>
+        <Button color="inherit" component={Link} to="/users">
+          Users
+        </Button>
+        <LogoutButton />
+      </Toolbar>
+    </AppBar>
   )
 }
 

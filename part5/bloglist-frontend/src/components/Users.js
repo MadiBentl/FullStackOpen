@@ -1,15 +1,16 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
+import {TableContainer, Table, TableHead, TableBody, TableRow, TableCell } from '@material-ui/core'
 
 const userConfig = {}
 
 const SingleUser = ({ user, num }) => {
   return(
-    <tr>
+    <TableRow>
       <td><Link to={`/Users/${userConfig[user]}`}>{user}</Link></td>
       <td>{num}</td>
-    </tr>
+    </TableRow>
   )
 }
 
@@ -27,22 +28,22 @@ const UserDashboard = () => {
   console.log(userConfig)
 
   return(
-    <div>
+    <TableContainer>
       <h1>Users</h1>
-      <table>
-        <thead>
-          <tr>
-            <th>Username</th>
-            <th>Blogs</th>
-          </tr>
-        </thead>
-        <tbody>
+      <Table>
+        <TableHead>
+          <TableRow>
+            <TableCell>Username</TableCell>
+            <TableCell>Blogs</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
           {Object.keys(userData).map(key =>
             <SingleUser key={key} user={key} num={userData[key]} />
           )}
-        </tbody>
-      </table>
-    </div>
+        </TableBody>
+      </Table>
+    </TableContainer>
   )
 }
 

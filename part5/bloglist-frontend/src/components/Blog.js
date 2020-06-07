@@ -1,15 +1,16 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import { ListItem, ListItemText } from '@material-ui/core'
 
 const Blog = ({ blog }) => {
   return(
-    <div>
+    <ListItem>
       <div className='mainInfo'>
         <Link to={`/${blog.id}`}>
-          {blog.title} {blog.author}
+          <ListItemText primary={`${blog.title} ${blog.author}`}/>
         </Link>
       </div>
-    </div>
+    </ListItem>
   )
 }
 

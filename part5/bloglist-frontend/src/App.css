@@ -10,3 +10,6 @@
   color: white;
   padding: 10px;
 }
+Table {
+  max-width: 75%
+}
