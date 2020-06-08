@@ -76,10 +76,11 @@ export const addBlog = (blog, user) => {
 }
 
 export const addComment = (blog, comment) => {
-  console.log('BLOGGY', blog)
+  console.log('BLOGGY', comment)
   return async dispatch => {
-    const updatedBlog = await blogService.createComment(blog, comment)
-    console.log('hiya[', updatedBlog)
+    const newBlog = { ...blog, comments: ['hello world']}
+    console.log('reducer', newBlog)
+    const updatedBlog = await blogService.createComment(newBlog)
     dispatch({ type: 'ADD_COMMENT', data: { blog: updatedBlog } })
   }
 }

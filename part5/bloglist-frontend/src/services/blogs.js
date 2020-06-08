@@ -12,8 +12,8 @@ const getAll = () => {
   return request.then(response => response.data)
 }
 
-const createComment = async (blog, comment) => {
-  const response = await axios.post(`${baseUrl}/${blog.id}/comments`, comment)
+const createComment = async (blog) => {
+  const response = await axios.put(`${baseUrl}/${blog.id}/comments`, blog)
   return response.data
 }
 

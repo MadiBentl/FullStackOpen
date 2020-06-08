@@ -3,7 +3,6 @@ import { useDispatch } from 'react-redux'
 import { addComment } from '../reducers/blogReducer'
 
 const Comments = (props) => {
-  console.log('rpos', props.blog)
   const dispatch = useDispatch()
   const [comment, setComment] = useState('')
 
