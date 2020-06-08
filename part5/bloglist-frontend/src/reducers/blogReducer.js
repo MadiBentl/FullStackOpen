@@ -22,7 +22,15 @@ const blogReducer = (state=[], action) => {
     case 'UPVOTE_BLOG':
       return state.map(blog => {
         if (blog.id === action.data.id){
-          return { ...blog, id: blog.id +1 }
+          return { ...blog, likes: blog.likes +1 }
+        }else{
+          return blog
+        }
+      })
+    case 'ADD_COMMENT':
+      return state.map(blog => {
+        if (blog.id === action.data.blog.id){
+          return action.data.blog
         }else{
           return blog
         }
@@ -64,6 +72,15 @@ export const addBlog = (blog, user) => {
     const newBlog = await blogService.create(blog)
     newBlog.user = { id: newBlog.user, username: user }
     dispatch({ type: 'CREATE_BLOG', data: { blog: newBlog } })
+  }
+}
+
+export const addComment = (blog, comment) => {
+  console.log('BLOGGY', blog)
+  return async dispatch => {
+    const updatedBlog = await blogService.createComment(blog, comment)
+    console.log('hiya[', updatedBlog)
+    dispatch({ type: 'ADD_COMMENT', data: { blog: updatedBlog } })
   }
 }
 export default blogReducer
