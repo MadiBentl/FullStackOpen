@@ -76,12 +76,12 @@ export const addBlog = (blog, user) => {
 }
 
 export const addComment = (blog, comment) => {
-  console.log('BLOGGY', comment)
   return async dispatch => {
-    const newBlog = { ...blog, comments: ['hello world']}
+    const newBlog = { ...blog, comments: blog.comments.concat(comment) }
     console.log('reducer', newBlog)
-    const updatedBlog = await blogService.createComment(newBlog)
-    dispatch({ type: 'ADD_COMMENT', data: { blog: updatedBlog } })
+    const comments = await blogService.createComment(blog, comment)
+    console.log(comments)
+    dispatch({ type: 'ADD_COMMENT', data: { blog: newBlog } })
   }
 }
 export default blogReducer
