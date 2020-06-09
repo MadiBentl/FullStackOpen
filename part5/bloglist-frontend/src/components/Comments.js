@@ -1,10 +1,21 @@
-import React, { useState } from 'react'
-import { useDispatch } from 'react-redux'
+import React, { useState, useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { addComment } from '../reducers/blogReducer'
+import { getComments } from '../reducers/commentsReducer'
+
 
 const Comments = (props) => {
   const dispatch = useDispatch()
+  const comments = useSelector(state => state.comments)
+  console.log('comments', comments)
   const [comment, setComment] = useState('')
+
+  useEffect(() => {
+    const fetchComments = async () => {
+      return await dispatch(getComments(props.blog))
+    }
+    fetchComments()
+  }, [])
 
   const handleSubmit = (event) => {
     event.preventDefault()
@@ -21,6 +32,12 @@ const Comments = (props) => {
           onChange={({ target }) => setComment(target.value )}
         />
         <button type='submit'>Button</button>
+        <h1>Comments</h1>
+        <ul>
+          {comments.map(comment => {
+            return <li key= {comment.id}>{comment.content}</li>
+          })}
+        </ul>
       </form>
     </div>
   )
