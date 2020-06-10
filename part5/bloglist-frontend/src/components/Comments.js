@@ -32,13 +32,13 @@ const Comments = (props) => {
           onChange={({ target }) => setComment(target.value )}
         />
         <button type='submit'>Button</button>
-        <h1>Comments</h1>
-        <ul>
-          {comments.map(comment => {
-            return <li key= {comment.id}>{comment.content}</li>
-          })}
-        </ul>
       </form>
+      <h1>Comments</h1>
+      <ul>
+        {comments.map(comment => {
+          return <li key= {comment.id}>{comment.content}</li>
+        })}
+      </ul>
     </div>
   )
 }

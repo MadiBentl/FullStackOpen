@@ -98,7 +98,6 @@ describe('Blog App', function(){
         cy.get('#url').type('cosmopolitan.com')
         cy.get('#add_blog').click()
 
-        cy.contains('Add a blog').click()
         cy.get('#title').type('Kim Karmonkian - pregnant with twins!!')
         cy.get('#author').type('EMT')
         cy.get('#url').type('EMT.com')
