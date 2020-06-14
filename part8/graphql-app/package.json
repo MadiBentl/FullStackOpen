@@ -1,0 +1,16 @@
+{
+  "name": "package.json",
+  "version": "1.0.0",
+  "description": "Learning graphql",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "author": "Madison Bentley",
+  "license": "MIT",
+  "dependencies": {
+    "apollo-server": "^2.14.4",
+    "graphql": "^15.1.0",
+    "uuid": "^8.1.0"
+  }
+}
