@@ -1,85 +1,22 @@
 const { v1: uuid } = require('uuid')
+const mongoose = require('mongoose')
+const jwt = require('jsonwebtoken')
+require('dotenv').config()
+const { ApolloServer, gql, UserInputError } = require('apollo-server')
 
-const { ApolloServer, gql } = require('apollo-server')
+const JWT_SECRET = 'NEED_HERE_A_SECRET_KEY'
 
-let authors = [
-  {
-    name: 'Robert Martin',
-    id: "afa51ab0-344d-11e9-a414-719c6709cf3e",
-    born: 1952,
-  },
-  {
-    name: 'Martin Fowler',
-    id: "afa5b6f0-344d-11e9-a414-719c6709cf3e",
-    born: 1963
-  },
-  {
-    name: 'Fyodor Dostoevsky',
-    id: "afa5b6f1-344d-11e9-a414-719c6709cf3e",
-    born: 1821
-  },
-  {
-    name: 'Joshua Kerievsky', // birthyear not known
-    id: "afa5b6f2-344d-11e9-a414-719c6709cf3e",
-  },
-  {
-    name: 'Sandi Metz', // birthyear not known
-    id: "afa5b6f3-344d-11e9-a414-719c6709cf3e",
-  },
-]
+const Author = require('./models/Author')
+const Book = require('./models/Book')
 
+mongoose.set('useFindAndModify', false)
+const MONGODB_URI = `mongodb+srv://mbentley:${process.env.MONGODB_PASSWORD}@cluster0-bbvhv.mongodb.net/<dbname>?retryWrites=true&w=majority
+`
+console.log('connecting to ', MONGODB_URI)
 
-let books = [
-  {
-    title: 'Clean Code',
-    published: 2008,
-    author: 'Robert Martin',
-    id: "afa5b6f4-344d-11e9-a414-719c6709cf3e",
-    genres: ['refactoring']
-  },
-  {
-    title: 'Agile software development',
-    published: 2002,
-    author: 'Robert Martin',
-    id: "afa5b6f5-344d-11e9-a414-719c6709cf3e",
-    genres: ['agile', 'patterns', 'design']
-  },
-  {
-    title: 'Refactoring, edition 2',
-    published: 2018,
-    author: 'Martin Fowler',
-    id: "afa5de00-344d-11e9-a414-719c6709cf3e",
-    genres: ['refactoring']
-  },
-  {
-    title: 'Refactoring to patterns',
-    published: 2008,
-    author: 'Joshua Kerievsky',
-    id: "afa5de01-344d-11e9-a414-719c6709cf3e",
-    genres: ['refactoring', 'patterns']
-  },
-  {
-    title: 'Practical Object-Oriented Design, An Agile Primer Using Ruby',
-    published: 2012,
-    author: 'Sandi Metz',
-    id: "afa5de02-344d-11e9-a414-719c6709cf3e",
-    genres: ['refactoring', 'design']
-  },
-  {
-    title: 'Crime and punishment',
-    published: 1866,
-    author: 'Fyodor Dostoevsky',
-    id: "afa5de03-344d-11e9-a414-719c6709cf3e",
-    genres: ['classic', 'crime']
-  },
-  {
-    title: 'The Demon ',
-    published: 1872,
-    author: 'Fyodor Dostoevsky',
-    id: "afa5de04-344d-11e9-a414-719c6709cf3e",
-    genres: ['classic', 'revolution']
-  },
-]
+mongoose.connect(MONGODB_URI, { useNewUrlParser: true})
+  .then(() => console.log('connected to mongodb'))
+  .catch(err => console.log("did not connect to mongodb ", err.message))
 
 const typeDefs = gql`
   type Query {
@@ -91,12 +28,11 @@ const typeDefs = gql`
 
   type Book {
     title: String!
-    author: String!
+    author: Author
     id: ID!
-    published: String!
+    published: Int!
     genres: [String!]!
   }
-
   type Author{
     name: String!
     id: ID!
@@ -119,54 +55,67 @@ const typeDefs = gql`
 
 const resolvers = {
   Query: {
-    bookCount: () => books.length,
-    authorCount: () => authors.length,
-    allBooks: (root, args) => {
-      if (args.author){
-        books = books.filter(b => {
-          return b.author === args.author
-        })
+    bookCount: async (root, args) => {
+      return await Book.collection.countDocuments()
+    },
+    authorCount: async (root, args) => {
+      return await Author.collection.countDocuments()
+    },
+    allBooks: async (root, args) => {
+      const query = {}
+      if(args.author){
+        const author = await Author.findOne({name: args.author})
+        console.log(author, args.author)
+        query['author'] = author._id
       }
       if (args.genre){
-        books = books.filter(b => {
-          return b.genres.includes(args.genre)
-        })
+        query['genres'] = args.genre
       }
-      return books
+        return await Book.find(query).populate('author')
     },
-    allAuthors: (root, args) => {
-      return authors.map(a => {
-        const booksWritten = books.filter(book => {
-          return book.author === a.name
-        })
-        a.bookCount = booksWritten.length
-        return a
-      })
+    allAuthors: async (root, args) => {
+      let authors = await Author.find({}).lean()
+      console.log(authors)
+      authors = await Promise.all(authors.map(async a => {
+        bookTotal = await Book.countDocuments({author: new mongoose.Types.ObjectId(a._id)})
+        return {...a, bookCount: bookTotal, id: mongoose.Types.ObjectId(a.id)}
+      }))
+
+
+      console.log(authors)
+      return authors
     }
   },
   Mutation: {
-    addBook: (root, args) => {
-      console.log('jfc')
-      const book = {...args, id: uuid()}
-      if (!(authors.some(a => a.name === args.author))){
-        authors = authors.concat({
-          name: args.author,
-          id: uuid()
-        })
-        console.log(authors)
-      }
-      books = books.concat(book)
-      return book
-    },
-    editAuthor: (root, args) => {
-      authors = authors.map(a => {
-        if (a.name === args.name){
-          return {...a, born: args.setBornTo}
+    addBook: async (root, args) => {
+      const book = new Book({...args})
+      const author = await Author.findOne({name: args.author})
+      try {
+        if (author){
+          book.author = author
+          await book.save()
         }
-        return a
-      })
-      return authors.find(a => a.name === args.name)
-    }
+        else{
+          const newAuthor = await new Author({name: args.author}).save()
+          console.log(newAuthor)
+          book.author = newAuthor
+          await book.save()
+        }
+        return book.populate('type')
+      } catch (err) {
+          throw UserInputError(err.message, {invalidArgs: args})
+      }
+    },
+    editAuthor: async (root, args) => {
+      const author = await Author.findOne({name: args.name})
+      try {
+        author.born = args.setBornTo
+        return author.save()
+      }catch (err) {
+        throw UserInputError(err.message, {invalidArgs: args})
+      }
+      return author
+    },
   }
 }
 

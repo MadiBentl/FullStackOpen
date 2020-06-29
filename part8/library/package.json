@@ -11,7 +11,10 @@
   "license": "MIT",
   "dependencies": {
     "apollo-server": "^2.14.4",
+    "dotenv": "^8.2.0",
     "graphql": "^15.1.0",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.9.20",
     "uuid": "^8.1.0"
   },
   "devDependencies": {
