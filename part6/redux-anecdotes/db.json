@@ -1,23 +1,19 @@
 {
   "anecdotes": [
     {
-      "id": "47145",
-      "votes": 2
-    },
-    {
       "id": "21149",
       "content": "Adding manpower to a late software project makes it later!",
-      "votes": 10
+      "votes": 14
     },
     {
       "id": "69581",
       "content": "The first 90 percent of the code accounts for the first 90 percent of the development time...The remaining 10 percent of the code accounts for the other 90 percent of the development time.",
-      "votes": 3
+      "votes": 6
     },
     {
-      "content": "Any fool can write code that a computer can understand. Good programmers write code that humans can understand.",
       "id": "36975",
-      "votes": 0
+      "content": "Any fool can write code that a computer can understand. Good programmers write code that humans can understand.",
+      "votes": 1
     },
     {
       "content": "Premature optimization is the root of all evil.",
@@ -30,107 +26,9 @@
       "votes": 0
     },
     {
-      "content": "df",
+      "content": "Programmi ng is fun",
       "votes": 0,
-      "id": "XdTgyK1"
-    },
-    {
-      "content": "df",
-      "votes": 0,
-      "id": "vmyuw5c"
-    },
-    {
-      "votes": 0,
-      "id": "gPxkBoz"
-    },
-    {
-      "votes": 0,
-      "id": "mmkGuZr"
-    },
-    {
-      "content": "ffffff",
-      "votes": 0,
-      "id": "nolYr33"
-    },
-    {
-      "content": "test",
-      "votes": 0,
-      "id": "IO3ApRf"
-    },
-    {
-      "content": "test2",
-      "votes": 0,
-      "id": "nEtyFZn"
-    },
-    {
-      "content": "df",
-      "votes": 0,
-      "id": "Nz3fW88"
-    },
-    {
-      "content": "s",
-      "votes": 0,
-      "id": "zuMk-1V"
-    },
-    {
-      "content": "test",
-      "votes": 0,
-      "id": "-xmbqcg"
-    },
-    {
-      "content": "please work",
-      "votes": 0,
-      "id": "cSpoUyW"
-    },
-    {
-      "content": "tesssst",
-      "votes": 0,
-      "id": "TSe_DOc"
-    },
-    {
-      "content": "",
-      "votes": 0,
-      "id": "Jy3Vlmu"
-    },
-    {
-      "content": "nmnmn",
-      "votes": 0,
-      "id": "OEcUbd8"
-    },
-    {
-      "content": "nmnmn",
-      "votes": 0,
-      "id": "H48ZttW"
-    },
-    {
-      "content": "help",
-      "votes": 0,
-      "id": "ZXsGdjh"
-    },
-    {
-      "content": "rer",
-      "votes": 0,
-      "id": "xJEQu6m"
-    },
-    {
-      "content": "test",
-      "votes": 0,
-      "id": "RwPx501"
-    },
-    {
-      "content": "help",
-      "votes": 0,
-      "id": "i4OrlFe"
-    },
-    {
-      "content": "fvghbjnkml",
-      "votes": 0,
-      "id": "ZT8_7Kr"
-    },
-    {
-      "content": "hghgh",
-      "votes": 0,
-      "id": "bhM-aRA"
+      "id": "Imvzm0L"
     }
   ]
 }

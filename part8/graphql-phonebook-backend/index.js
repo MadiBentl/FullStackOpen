@@ -1,6 +1,11 @@
 const { ApolloServer, gql } = require('apollo-server')
 const mongoose = require('mongoose')
+const jwt = require('jsonwebtoken')
+
+const JWT_SECRET = 'NEED_HERE_A_SECRET_KEY'
+
 const Person = require('./models/person')
+const User = require('./models/user')
 
 mongoose.set('useFindAndModify', false)
 
@@ -21,6 +26,14 @@ const typeDefs = gql`
     address: Address!
     id: ID!
   }
+  type User {
+    username: String!
+    friends: [Person!]!,
+    id: ID!
+  }
+  type Token {
+    value: String!
+  }
   type Address {
     street: String!
     city: String!
@@ -33,6 +46,7 @@ const typeDefs = gql`
     personCount: Int!
     allPersons(phone: YesNo): [Person!]!
     findPerson(name: String!): Person
+    me: User
   }
   type Mutation {
     addPerson(
@@ -41,10 +55,20 @@ const typeDefs = gql`
       street: String!
       city: String!
     ): Person
+    addAsFriend(
+      name: String!
+    ): User
     editNumber(
       name: String!
       phone: String!
     ): Person
+    createUser(
+      username: String!
+    ) : User
+    login(
+      username: String!
+      password: String!
+    ): Token
   }
 `
 
@@ -56,6 +80,9 @@ const resolvers = {
         return Person.find({})
       }
       return Person.find({ phone: { $exists: args.phone === 'YES'  } })
+    },
+    me: (root, args, context) => {
+      return context.currentUser
     },
     findPerson: (root, args) =>
       Person.findOne({name: args.name})
@@ -69,14 +96,74 @@ const resolvers = {
     }
   },
   Mutation: {
-    addPerson: (root, args) => {
+    addPerson: async (root, args, context) => {
       const person = new Person({ ...args })
-      return person.save()
+      const currentUser = context.currentUser
+
+      if (!currentUser){
+        throw new AuthenticationError('not authenticated')
+      }
+
+      try {
+        await person.save()
+        currentUser.friends = currentUser.friends.concat(person)
+      } catch (error) {
+        throw new UserInputError(error.message, {
+          invalidArgs: args,
+        })
+      }
+      return person
+    },
+    addAsFriend: async (root, args, { currentUser }) => {
+      const nonFriendAlready = person => {
+        !currentUser.friends.map(f => f._id).includes(person._id)
+      }
+      if (!currentUser) {
+        throw new AuthenticationError('not authenticated')
+      }
+
+      const person = await Person.findOne({ name: args.name })
+      if (nonFriendAlready(person)) {
+        currentUser.friends = currentUser.friends.concat(person)
+      }
+      await currentUser.save()
+
+      return currentUser
     },
     editNumber: async (root, args) => {
       const person = await Person.findOne({ name: args.name })
       person.phone = args.phone
-      return person.save()
+      try {
+        await person.save()
+      }catch (error) {
+        throw new UserInputError(error.message, {
+          invalidArgs: args,
+        })
+      }
+      return person
+    },
+    createUser: (root, args) => {
+      const user = new User({...args})
+      return user.save()
+        .catch(err => {
+          throw new UserInputError(error.message, {
+            invalidArgs: args,
+          })
+        })
+    },
+    login: async (root, args) => {
+      const user = await User.findOne({ username: args.username})
+
+      if (!user || args.password !== 'secred'){
+        throw new UserInputError('wrong credentials')
+      }
+
+      const userForToken = {
+        username: user.username,
+        id: user._id
+      }
+
+      return { value: jwt.sign(userForToken, JWT_SECRET)}
     }
   }
 }
@@ -84,6 +171,16 @@ const resolvers = {
 const server = new ApolloServer({
   typeDefs,
   resolvers,
+  context: async({ req }) => {
+    const auth = req ? req.headers.authorization: null
+    if (auth && auth.toLowerCase().startsWith('bearer')) {
+      const decodedToken = jwt.verify(
+        auth.substring(7), JWT_SECRET
+      )
+      const currentUser = await User.findById(decodedToken.id).populate('friends')
+      return { currentUser }
+    }
+  }
 })
 
 server.listen().then(({ url }) => {

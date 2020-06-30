@@ -4,13 +4,17 @@
   "description": "Learning graphql",
   "main": "index.js",
   "scripts": {
-    "test": "test"
+    "test": "test",
+    "dev": "nodemon index.js"
   },
   "author": "Madison Bentley",
   "license": "MIT",
   "dependencies": {
-    "apollo-server": "^2.14.4",
+    "apollo-server": "^2.15.0",
     "graphql": "^15.1.0",
     "uuid": "^8.1.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.4"
   }
 }
