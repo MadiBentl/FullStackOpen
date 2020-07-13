@@ -3,20 +3,24 @@ import { useQuery, useMutation } from '@apollo/client';
 import { getAllAuthors, ADD_YEAR } from '../queries'
 
 const BirthYear = (props) => {
-  const [name, setName] = useState('')
+  const [name, setName] = useState(props.authors[0].name)
   const [date, setDate] = useState('')
   const [ addYear ] = useMutation(ADD_YEAR)
   const submit = async (event) => {
     event.preventDefault()
     console.log(name, date)
     addYear({ variables: {name, setBornTo: Number(date)} })
+  }
 
+  const handleSelect = (e) => {
+    console.log(e.target.value)
+    setName(e.target.value)
   }
   return (
     <div>
       <form onSubmit = {submit}>
         Name
-        <select value={name} onChange={({target}) => setName(target.value)}>
+        <select value={name} onChange={handleSelect}>
         {props.authors.map(author => {
         return  <option key={author.id} value={author.name}>{author.name}</option>
         })}
