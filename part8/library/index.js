@@ -84,6 +84,7 @@ const resolvers = {
     },
     allBooks: async (root, args) => {
       const query = {}
+      console.log(args)
       if(args.author){
         const author = await Author.findOne({name: args.author})
         query['author'] = author._id
@@ -117,7 +118,6 @@ const resolvers = {
           }
         })
       })
-      console.log(genres)
       return genres;
     }
   },
