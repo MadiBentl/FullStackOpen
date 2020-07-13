@@ -61,7 +61,13 @@ export const ADD_YEAR = gql`
     }
   }
 `
-
+export const ME = gql`
+query{
+  me{
+    favouriteGenre
+  }
+}
+`
 export const LOGIN = gql`
   mutation login($username: String!, $password: String!) {
     login(
