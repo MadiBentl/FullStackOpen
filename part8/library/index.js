@@ -25,6 +25,7 @@ const typeDefs = gql`
     authorCount: Int!
     allBooks(author: String genre: String): [Book!]!
     allAuthors: [Author!]!
+    allGenres: [String!]!
     me: User
   }
 
@@ -85,12 +86,12 @@ const resolvers = {
       const query = {}
       if(args.author){
         const author = await Author.findOne({name: args.author})
-        console.log(author, args.author)
         query['author'] = author._id
       }
       if (args.genre){
         query['genres'] = args.genre
       }
+        console.log('books:', Book.find(query).populate('author'))
         return await Book.find(query).populate('author')
     },
     allAuthors: async (root, args) => {
@@ -105,7 +106,20 @@ const resolvers = {
       console.log(authors)
       return authors
     },
-    me: (root, args, context) => { return context.currentUser}
+    me: (root, args, context) => { return context.currentUser},
+    allGenres: async (root, args) => {
+      const books = await Book.find({})
+      const genres = []
+      books.forEach(book => {
+        book.genres.forEach(genre => {
+          if (!genres.includes(genre)){
+            genres.push(genre)
+          }
+        })
+      })
+      console.log(genres)
+      return genres;
+    }
   },
   Mutation: {
     addBook: async (root, args, context) => {
@@ -130,7 +144,8 @@ const resolvers = {
           throw new UserInputError(err.message, {invalidArgs: args})
       }
     },
-    editAuthor: async (root, args) => {
+    editAuthor: async (root, args, context) => {
+      console.log(args)
       if (!context.currentUser){
         throw new UserInputError('must be logged in')
       }
@@ -160,7 +175,7 @@ const resolvers = {
             username: user.username,
             id: user._id
           }
-          console.log(user, userForToken)
+          console.log("user", user, "userforToken", userForToken)
           return { value: jwt.sign(userForToken, JWT_SECRET) }
         }
       }catch(err) {
