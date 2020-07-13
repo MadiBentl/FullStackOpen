@@ -1,17 +1,32 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useQuery } from '@apollo/client';
-import { ALL_BOOKS } from '../queries'
+import { ALL_BOOKS, ALL_GENRES } from '../queries'
 
 const Books = (props) => {
   const response = useQuery(ALL_BOOKS)
-  console.log(response.data)
-  if (response.loading){
+  let genres = useQuery(ALL_GENRES)
+
+  const [filter, setFilter] = useState(null)
+
+  if (!props.show || response.loading) {
     return null
   }
-  const books = response.data.allBooks
-  console.log(books)
-  if (!props.show) {
-    return null
+  console.log(response.data.allBooks)
+  const books = filter ? response.data.allBooks.filter(b => b.genres.includes(filter)) : response.data.allBooks
+
+  const handleButtonClick = (genre) => {
+    setFilter(genre)
+  }
+
+  const renderFilters = () => {
+    if (genres.loading){
+      return null
+    }
+    genres = genres.data.allGenres
+    console.log(genres)
+    return genres.map(genre =>
+       <button onClick={() => handleButtonClick(genre)} key={genre}>{genre}</button>
+    )
   }
   return (
     <div>
@@ -37,6 +52,7 @@ const Books = (props) => {
           )}
         </tbody>
       </table>
+      <div>Filter: {genres? renderFilters() : null}</div>
     </div>
   )
 }
