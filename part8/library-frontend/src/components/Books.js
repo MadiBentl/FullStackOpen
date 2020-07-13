@@ -8,8 +8,11 @@ const Books = (props) => {
 
   const [filter, setFilter] = useState(null)
 
-  if (!props.show || response.loading) {
+  if (!props.show) {
     return null
+  }
+  if (response.loading) {
+    return 'loading...'
   }
   console.log(response.data.allBooks)
   const books = filter ? response.data.allBooks.filter(b => b.genres.includes(filter)) : response.data.allBooks
@@ -52,7 +55,7 @@ const Books = (props) => {
           )}
         </tbody>
       </table>
-      <div>Filter: {genres? renderFilters() : null}</div>
+      <div>Filter: {genres? renderFilters() : null}<button onClick={() => setFilter(null)}>all</button></div>
     </div>
   )
 }
